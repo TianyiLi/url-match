@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "version": "1.0",
+  "name": "oh my url",
+  "background": {
+    "service_worker": "background.ts"
+  },
+  "action": {
+    "default_icon": "assets/img/icon-34.png",
+    "default_title": "test",
+    "default_popup": "popup/index.html"
+  },
+  "icons": {
+    "128": "assets/img/icon-128.png"
+  },
+  "permissions": [
+    "storage",
+    "tabs"
+  ]
+}
