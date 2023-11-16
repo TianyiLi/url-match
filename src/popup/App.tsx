@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import { match } from 'path-to-regexp';
+import useBoolean from './hooks/useBoolean';
 
 export default function App() {
   const [allTabsInfo, setAllTabsInfo] = useState<
@@ -30,6 +31,8 @@ export default function App() {
   const grepRef = useRef<HTMLInputElement>(null);
   const [urlToggle, setUrlToggle] = useState(false);
 
+  const [addBaseUrl, setAddBaseUrl] = useBoolean()
+
   useLayoutEffect(() => {
     (async () => {
       const {
@@ -57,7 +60,7 @@ export default function App() {
   function CopyAll() {
     let tabValue = allTabsInfo.map((tab) => {
       const url = new URL(tab.url);
-      return url.pathname;
+      return addBaseUrl ? `${url.origin}${url.pathname}` : url.pathname;
     });
     if (inputRef.current && inputRef.current.value) {
       const pickUpToken = grepRef.current?.value ?? '*';
@@ -112,12 +115,27 @@ export default function App() {
           cursor: 'pointer',
         }}
       >
-        <label htmlFor="toggle">url is display?</label>
+        <label htmlFor="toggle-url">url is display?</label>
         <input
           type="checkbox"
           checked={urlToggle}
-          id="toggle"
+          id="toggle-url"
           onChange={onToggle}
+        />
+      </div>
+      <div
+        style={{
+          padding: '8px 16px',
+          border: 'solid 1px black',
+          cursor: 'pointer',
+        }}
+      >
+        <label htmlFor="toggle-copy-all">copy with host?</label>
+        <input
+          type="checkbox"
+          checked={addBaseUrl}
+          id="toggle-copy-all"
+          onChange={setAddBaseUrl.toggle}
         />
       </div>
       <div
